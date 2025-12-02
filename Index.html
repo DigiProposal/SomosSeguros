@@ -1,1 +1,883 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareFlow - Ecosistema de Salud Inteligente</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#0B2447',  // Deep Blue (Trust)
+                            teal: '#00D4FF',  // Bright Cyan (Tech/Flow)
+                            light: '#F0F9FF', // Light Blue bg
+                            slate: '#64748B', // Text secondary
+                            accent: '#FF6B6B', // Coral for alerts
+                            success: '#10B981' // Green
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { scroll-behavior: smooth; }
+        .gradient-text {
+            background: linear-gradient(135deg, #0B2447 0%, #00D4FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-bg { background: radial-gradient(circle at top right, #E0F7FA 0%, #FFFFFF 60%); }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(11, 36, 71, 0.1);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        /* Simulator Styles */
+        .typing-effect::after { content: '|'; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .layer-btn {
+            transition: all 0.3s ease;
+        }
+        .layer-btn.active {
+            background-color: #0B2447;
+            color: white;
+            border-left: 4px solid #00D4FF;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .layer-btn.active i {
+            color: #00D4FF;
+        }
+        
+        /* Chart Container */
+        .chart-container { position: relative; height: 300px; width: 100%; }
+
+        /* Roadmap Steps */
+        .step-connector::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            width: 2px;
+            background: #E2E8F0;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-800 bg-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300 shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-center md:justify-end h-16 items-center">
+                <div class="hidden lg:flex space-x-6 items-center">
+                    <a href="#simulator" class="text-xs font-bold text-brand-teal hover:text-brand-navy transition uppercase tracking-wider">Simulador IA</a>
+                    <a href="#human-ai" class="text-xs font-semibold text-slate-600 hover:text-brand-navy transition uppercase tracking-wider">Human-like AI</a>
+                    <a href="#metodologia" class="text-xs font-semibold text-slate-600 hover:text-brand-navy transition uppercase tracking-wider">Metodología</a>
+                    <a href="#proximos-pasos" class="text-xs font-bold text-brand-navy bg-brand-light px-4 py-2 rounded-full border border-brand-teal/20 hover:bg-brand-teal hover:text-white transition uppercase tracking-wider">
+                        Próximos Pasos <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 hero-bg relative overflow-hidden text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
+            
+            <!-- Large Logo in Hero -->
+            <div class="mb-10 animate-fade-in-up">
+                <img src="https://ik.imagekit.io/50wnllxkw/CAREFLOW%20LOGO.png?updatedAt=1762964277893" alt="CareFlow Logo" class="h-24 md:h-32 w-auto mx-auto drop-shadow-xl hover:scale-105 transition duration-500">
+            </div>
+
+            <span class="inline-block py-1 px-4 rounded-full bg-brand-light text-brand-navy text-xs font-bold tracking-wider mb-6 border border-brand-teal/30 animate-fade-in-up" style="animation-delay: 0.1s;">
+                ECOSISTEMA DE SALUD & DATA
+            </span>
+            
+            <h1 class="text-5xl md:text-6xl font-extrabold text-brand-navy leading-tight mb-6 max-w-4xl animate-fade-in-up" style="animation-delay: 0.2s;">
+                Controla el Viaje.<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-teal to-blue-600">Capitaliza la Demanda.</span>
+            </h1>
+            
+            <p class="text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto animate-fade-in-up" style="animation-delay: 0.3s;">
+                Transformamos al corredor en el dueño de una plataforma de <strong>"Health Concierge"</strong>. 
+                Utilizamos IA para dirigir al paciente panameño hacia una red eficiente, reduciendo la siniestralidad y creando nuevas fuentes de ingreso.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.4s;">
+                <button onclick="document.getElementById('simulator').scrollIntoView()" class="bg-brand-navy text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-brand-navy/30 hover:bg-slate-800 transition transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <i class="fas fa-robot"></i> Probar Simulador Gatekeeper
+                </button>
+                <button onclick="document.getElementById('proximos-pasos').scrollIntoView()" class="bg-white text-brand-navy border border-slate-200 px-8 py-4 rounded-xl font-bold hover:bg-slate-50 transition">
+                    Ver Hoja de Ruta
+                </button>
+            </div>
+        </div>
+        
+        <!-- Background Elements -->
+        <div class="absolute top-1/2 left-0 w-64 h-64 bg-brand-teal rounded-full filter blur-[100px] opacity-20 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-600 rounded-full filter blur-[120px] opacity-10"></div>
+    </section>
+
+    <!-- SECTION: GATEKEEPER AI SIMULATOR -->
+    <section id="simulator" class="py-20 bg-white border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-brand-navy">El Motor de "Steering" Inteligente</h2>
+                <p class="text-slate-600 mt-2">
+                    Experimenta cómo nuestra IA analiza síntomas, pólizas y costos en tiempo real para direccionar al paciente.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 bg-slate-50 p-6 rounded-3xl border border-slate-200 shadow-inner">
+                
+                <!-- Input Panel -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-brand-navy mb-4 flex items-center gap-2">
+                        <span class="bg-brand-teal text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span> 
+                        Selecciona un Caso Real
+                    </h3>
+                    <div class="space-y-3">
+                        <button onclick="runSimulation('urgencia')" class="w-full text-left p-4 rounded-xl border border-slate-200 hover:border-brand-accent hover:bg-red-50 transition group">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-slate-800">Dolor de Cabeza Intenso</span>
+                                <i class="fas fa-exclamation-circle text-red-400 group-hover:text-brand-accent"></i>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">Perfil: Mujer, 45 años, Plan Premium</p>
+                        </button>
+
+                        <button onclick="runSimulation('cronico')" class="w-full text-left p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition group">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-slate-800">Receta Diabetes (Mensual)</span>
+                                <i class="fas fa-pills text-blue-400 group-hover:text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">Perfil: Hombre, 60 años, Plan Básico</p>
+                        </button>
+
+                        <button onclick="runSimulation('imagen')" class="w-full text-left p-4 rounded-xl border border-slate-200 hover:border-green-500 hover:bg-green-50 transition group">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-slate-800">Resonancia de Rodilla</span>
+                                <i class="fas fa-x-ray text-green-400 group-hover:text-green-600"></i>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">Perfil: Joven, 25 años, Deportista</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI Processing Display (Terminal Style) -->
+                <div class="lg:col-span-2 bg-brand-navy rounded-2xl p-6 relative overflow-hidden font-mono text-sm text-brand-light shadow-2xl flex flex-col min-h-[350px]">
+                    <div class="flex items-center gap-2 mb-4 border-b border-white/10 pb-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="ml-2 text-xs text-brand-teal opacity-70">CareFlow AI Gatekeeper v2.0</span>
+                    </div>
+                    <div id="simulation-output" class="flex-grow space-y-2 overflow-y-auto custom-scrollbar">
+                        <p class="text-slate-400 typing-effect">Esperando input del paciente...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: HUMAN-LIKE AI EXPLANATION -->
+    <section id="human-ai" class="py-24 bg-brand-navy relative overflow-hidden text-white">
+        <!-- Decoration -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-teal/10 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-600 rounded-full filter blur-[100px] opacity-20"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Text Content -->
+                <div>
+                    <span class="text-brand-teal font-bold tracking-widest text-xs uppercase mb-2 block">Más allá del Chatbot</span>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">El Concierge "Human-like AI"</h2>
+                    <p class="text-blue-100 text-lg leading-relaxed mb-8">
+                        La transformación de 'Somos Seguros' no es solo automatización; es evolución. Implementamos agentes que no solo "hablan", sino que <strong class="text-brand-teal">"sienten" y "razonan"</strong>, superando las limitaciones frías de los IVR tradicionales.
+                    </p>
+                    
+                    <div class="flex items-center gap-4 text-sm text-slate-400 bg-white/5 p-4 rounded-xl border border-white/10">
+                        <i class="fas fa-info-circle text-brand-teal"></i>
+                        <span>Objetivo: Empatía sintética indistinguible de la humana.</span>
+                    </div>
+                </div>
+
+                <!-- 3 Pillars Cards -->
+                <div class="space-y-6">
+                    <!-- Pillar 1 -->
+                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/15 transition duration-300">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-pink-500/20 text-pink-400 rounded-xl flex items-center justify-center text-xl mr-4">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white mb-1">1. Empatía Sintética</h3>
+                                <p class="text-sm text-gray-300">
+                                    Capacidad de detectar emociones (miedo, urgencia) en la voz del usuario y adaptar el tono para calmar o acompañar.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pillar 2 -->
+                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/15 transition duration-300">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-brand-teal/20 text-brand-teal rounded-xl flex items-center justify-center text-xl mr-4">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white mb-1">2. Conversación Fluida (Full Duplex)</h3>
+                                <p class="text-sm text-gray-300">
+                                    Hablar, escuchar e interrumpir naturalmente con latencia < 500ms. Adiós a las pausas robóticas incómodas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pillar 3 -->
+                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/15 transition duration-300">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center text-xl mr-4">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white mb-1">3. Razonamiento Contextual</h3>
+                                <p class="text-sm text-gray-300">
+                                    Recuerda el contexto ("mi hijo tiene fiebre") y aplica lógica compleja de coberturas de pólizas en tiempo real.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: CONSUMER PROFILE -->
+    <section id="oportunidad" class="py-24 bg-brand-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-brand-navy">El Perfil del Consumidor Panameño</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mt-4">
+                    Adaptado a la realidad local. Los sistemas importados fallan porque ignoran estas tres fricciones críticas.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- WhatsApp First -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-green-500 transition duration-300">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-6 text-2xl text-green-600">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy mb-2">Hiperconectado</h3>
+                    <p class="text-sm text-slate-600">
+                        El panameño odia los IVR ("marque 1") y las apps con login. Exige inmediatez por chat.
+                    </p>
+                </div>
+                <!-- Pocket Sensitive -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-brand-accent transition duration-300">
+                    <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-6 text-2xl text-brand-accent">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy mb-2">Sensible al Bolsillo</h3>
+                    <p class="text-sm text-slate-600">
+                        La barrera #1 es el desembolso inmediato. Prefiere redes con copago bajo o nulo sobre reembolsos.
+                    </p>
+                </div>
+                <!-- Disoriented -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-brand-teal transition duration-300">
+                    <div class="w-14 h-14 bg-cyan-100 rounded-full flex items-center justify-center mb-6 text-2xl text-brand-teal">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy mb-2">Desorientado</h3>
+                    <p class="text-sm text-slate-600">
+                        Ante la duda, acude a urgencias costosas. Necesita una guía experta inmediata 24/7.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: METHODOLOGY (6 LAYERS) -->
+    <section id="metodologia" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-brand-navy mb-4 text-center">Metodología de Implementación</h2>
+            <p class="text-center text-slate-600 mb-12">Un modelo "clonable" diseñado para mitigar riesgos.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <div class="md:col-span-4 space-y-2">
+                    <button onclick="showLayer(1)" id="btn-layer-1" class="layer-btn active w-full text-left p-4 rounded-lg bg-slate-50 hover:bg-slate-100 flex items-center justify-between group">
+                        <span class="font-bold">1. Gobierno & Compliance</span>
+                        <i class="fas fa-balance-scale text-slate-400"></i>
+                    </button>
+                    <button onclick="showLayer(2)" id="btn-layer-2" class="layer-btn w-full text-left p-4 rounded-lg bg-slate-50 hover:bg-slate-100 flex items-center justify-between group">
+                        <span class="font-bold">2. Datos & Tech</span>
+                        <i class="fas fa-database text-slate-400"></i>
+                    </button>
+                    <button onclick="showLayer(3)" id="btn-layer-3" class="layer-btn w-full text-left p-4 rounded-lg bg-slate-50 hover:bg-slate-100 flex items-center justify-between group">
+                        <span class="font-bold">3. Viaje del Paciente</span>
+                        <i class="fas fa-route text-slate-400"></i>
+                    </button>
+                    <button onclick="showLayer(4)" id="btn-layer-4" class="layer-btn w-full text-left p-4 rounded-lg bg-slate-50 hover:bg-slate-100 flex items-center justify-between group">
+                        <span class="font-bold">4. Modelo Operativo</span>
+                        <i class="fas fa-users-cog text-slate-400"></i>
+                    </button>
+                    <button onclick="showLayer(5)" id="btn-layer-5" class="layer-btn w-full text-left p-4 rounded-lg bg-slate-50 hover:bg-slate-100 flex items-center justify-between group">
+                        <span class="font-bold">5. Experiencia (UX)</span>
+                        <i class="fab fa-whatsapp text-slate-400"></i>
+                    </button>
+                    <button onclick="showLayer(6)" id="btn-layer-6" class="layer-btn w-full text-left p-4 rounded-lg bg-slate-50 hover:bg-slate-100 flex items-center justify-between group">
+                        <span class="font-bold">6. Expansión</span>
+                        <i class="fas fa-chart-line text-slate-400"></i>
+                    </button>
+                </div>
+
+                <div class="md:col-span-8 bg-brand-light p-8 rounded-2xl border border-blue-100 min-h-[400px] relative flex flex-col justify-center">
+                    <div id="layer-content" class="transition-opacity duration-300"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: FINANCIAL IMPACT FOR CLIENT (POLICYHOLDER) -->
+    <section id="ahorro-cliente" class="py-24 bg-brand-navy text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#00D4FF 1px, transparent 1px); background-size: 30px 30px;"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="mb-16 text-center">
+                <span class="text-brand-teal font-bold tracking-widest text-xs uppercase mb-2 block">Valor para la Empresa / Aseguradora</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Ahorro Estructural & Control de Siniestralidad</h2>
+                <p class="text-blue-200 max-w-3xl mx-auto">
+                    El modelo tradicional es financieramente insostenible en Panamá (41.74% cargas sociales). CareFlow transforma costos fijos en variables.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <!-- Financial Stats Card -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-8">
+                    <h3 class="text-xl font-bold text-white mb-6 border-b border-white/10 pb-4">Comparativa Costo Operativo (Mensual)</h3>
+                    
+                    <div class="space-y-6">
+                        <!-- Human Cost -->
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-gray-300">Agente Humano (Salario + Cargas)</span>
+                                <span class="text-red-400 font-bold">$1,384.00</span>
+                            </div>
+                            <div class="w-full bg-white/10 rounded-full h-4">
+                                <div class="bg-red-500 h-4 rounded-full" style="width: 100%"></div>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Disponibilidad: 8h/día. Lineal.</p>
+                        </div>
+
+                        <!-- AI Cost -->
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-gray-300">Agente CareFlow IA (Variable)</span>
+                                <span class="text-brand-teal font-bold">~$250.00*</span>
+                            </div>
+                            <div class="w-full bg-white/10 rounded-full h-4">
+                                <div class="bg-brand-teal h-4 rounded-full" style="width: 18%"></div>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Disponibilidad: 24/7. Escalabilidad infinita.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 grid grid-cols-2 gap-4">
+                        <div class="bg-black/20 p-4 rounded-xl text-center">
+                            <div class="text-2xl font-bold text-brand-teal">85%</div>
+                            <div class="text-xs text-gray-300">Ahorro por Interacción</div>
+                        </div>
+                        <div class="bg-black/20 p-4 rounded-xl text-center">
+                            <div class="text-2xl font-bold text-brand-teal">2-3 Meses</div>
+                            <div class="text-xs text-gray-300">Retorno (ROI)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Steering Impact -->
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-4">Valor Real: <span class="text-brand-teal">Steering Médico</span></h3>
+                    <p class="text-gray-300 mb-6 text-sm leading-relaxed">
+                        Controlamos la inflación médica evitando visitas innecesarias a urgencias y dirigiendo el volumen a redes negociadas.
+                    </p>
+
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <div class="bg-green-500/20 p-2 rounded-lg text-green-400 mr-4 mt-1"><i class="fas fa-chart-line-down"></i></div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Reducción de Urgencias Innecesarias</h4>
+                                <p class="text-xs text-gray-400">El 60% de visitas son evitables vía Telemedicina ($0 costo).</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="bg-brand-teal/20 p-2 rounded-lg text-brand-teal mr-4 mt-1"><i class="fas fa-hand-holding-usd"></i></div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Tarifas Preferenciales</h4>
+                                <p class="text-xs text-gray-400">Negociación por volumen garantizado con Labs y Farmacias.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: REVENUE STREAMS FOR CAREFLOW (BROKER) -->
+    <section id="ingresos-careflow" class="py-24 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-brand-navy font-bold tracking-widest text-xs uppercase mb-2 block">Modelo de Negocio para el Corredor</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-navy mb-4">Potencial de Ingresos del Ecosistema</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">
+                    Evoluciona de cobrar solo comisiones a un modelo diversificado de "Broker-as-a-Platform".
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                <!-- Stream 1 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
+                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 text-3xl text-blue-600 group-hover:scale-110 transition">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy mb-2">1. Fee Tecnológico (SaaS)</h3>
+                    <p class="text-sm text-slate-500 mb-4">
+                        Cobro PEPM (Per Employee Per Month) por la plataforma de gestión de beneficios.
+                    </p>
+                    <div class="text-xs font-bold text-blue-600 bg-blue-50 py-2 px-4 rounded-full inline-block">Ingreso Recurrente</div>
+                </div>
+
+                <!-- Stream 2 (Main) -->
+                <div class="bg-white p-8 rounded-3xl shadow-xl border-2 border-brand-teal transform md:-translate-y-4 z-10 relative">
+                    <div class="absolute top-0 right-0 bg-brand-teal text-white text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-xl">MAYOR POTENCIAL</div>
+                    <div class="w-16 h-16 bg-brand-light rounded-2xl flex items-center justify-center mb-6 text-3xl text-brand-teal group-hover:scale-110 transition">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy mb-2">2. Gestión de Red (Steering)</h3>
+                    <p class="text-sm text-slate-500 mb-4">
+                        Monetización del volumen. Acuerdos de "Shared Savings" o Rebates con Laboratorios y Farmacias.
+                    </p>
+                    <div class="text-xs font-bold text-brand-teal bg-cyan-50 py-2 px-4 rounded-full inline-block">Nuevo Margen Neto</div>
+                </div>
+
+                <!-- Stream 3 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 group">
+                    <div class="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center mb-6 text-3xl text-purple-600 group-hover:scale-110 transition">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-navy mb-2">3. Retención de Cartera</h3>
+                    <p class="text-sm text-slate-500 mb-4">
+                        Menos fuga de clientes = Mayor Lifetime Value (LTV). Protección de la comisión base.
+                    </p>
+                    <div class="text-xs font-bold text-purple-600 bg-purple-50 py-2 px-4 rounded-full inline-block">Defensa</div>
+                </div>
+            </div>
+
+            <!-- Revenue Chart Area -->
+            <div class="mt-16 bg-white p-8 rounded-3xl border border-slate-100 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="chart-container">
+                    <canvas id="revenueMixChart"></canvas>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-brand-navy mb-4">Diversificación de Ingresos</h3>
+                    <p class="text-slate-600 text-sm mb-6">
+                        Proyección Año 3: El modelo CareFlow crea un flujo de caja robusto basado en servicios y tecnología, reduciendo la dependencia de la siniestralidad.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: NEXT STEPS & ROADMAP -->
+    <section id="proximos-pasos" class="py-24 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="bg-brand-navy text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">Objetivo de la Reunión</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-navy mb-4">Hoja de Ruta y Próximos Pasos</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">
+                    Para activar CareFlow, proponemos un plan escalonado en 4 fases, diseñado para mitigar riesgos técnicos y regulatorios desde el día uno.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <!-- Left Column: The 4 Phases Timeline -->
+                <div class="lg:col-span-8 relative step-connector">
+                    
+                    <!-- Phase 1 -->
+                    <div class="relative pl-12 pb-12">
+                        <div class="absolute left-0 top-0 w-10 h-10 bg-brand-navy text-white rounded-full flex items-center justify-center font-bold z-10 border-4 border-white shadow-lg">1</div>
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-brand-teal transition">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-brand-navy">Fase 1: Legal & Compliance</h3>
+                                <span class="text-xs font-bold bg-slate-200 text-slate-600 px-2 py-1 rounded">Meses 1-2</span>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-4">Objetivo: Blindaje regulatorio bajo Ley 59, 81 y 203.</p>
+                            <ul class="space-y-2 text-sm text-slate-500">
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Estructura TPA (Separación de Corretaje).</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Walled Garden (Privacidad de Datos).</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Marco de Telemedicina y Recetas.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Phase 2 -->
+                    <div class="relative pl-12 pb-12">
+                        <div class="absolute left-0 top-0 w-10 h-10 bg-white text-brand-navy border-2 border-brand-navy rounded-full flex items-center justify-center font-bold z-10 shadow-lg">2</div>
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-brand-teal transition">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-brand-navy">Fase 2: MVP Tecnológico</h3>
+                                <span class="text-xs font-bold bg-slate-200 text-slate-600 px-2 py-1 rounded">Meses 2-5</span>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-4">Objetivo: El "Cerebro" IA y la Interfaz WhatsApp.</p>
+                            <ul class="space-y-2 text-sm text-slate-500">
+                                <li class="flex items-center"><i class="fas fa-code text-brand-teal mr-2"></i> Ingesta de Pólizas (Motor RAG).</li>
+                                <li class="flex items-center"><i class="fas fa-code text-brand-teal mr-2"></i> Automatización Portales (RPA).</li>
+                                <li class="flex items-center"><i class="fas fa-code text-brand-teal mr-2"></i> Interfaz Conversacional WhatsApp.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Phase 3 -->
+                    <div class="relative pl-12 pb-12">
+                        <div class="absolute left-0 top-0 w-10 h-10 bg-white text-brand-navy border-2 border-brand-navy rounded-full flex items-center justify-center font-bold z-10 shadow-lg">3</div>
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-brand-teal transition">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-brand-navy">Fase 3: Red & Steering</h3>
+                                <span class="text-xs font-bold bg-slate-200 text-slate-600 px-2 py-1 rounded">Meses 4-6</span>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-4">Objetivo: Oferta de valor clínica y negociación.</p>
+                            <ul class="space-y-2 text-sm text-slate-500">
+                                <li class="flex items-center"><i class="fas fa-handshake text-brand-teal mr-2"></i> Negociación con 20-30 Proveedores Clave.</li>
+                                <li class="flex items-center"><i class="fas fa-cogs text-brand-teal mr-2"></i> Configuración Algoritmos (Costo/Calidad).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Phase 4 -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-0 top-0 w-10 h-10 bg-brand-teal text-white rounded-full flex items-center justify-center font-bold z-10 shadow-lg">4</div>
+                        <div class="bg-brand-light p-6 rounded-2xl border border-brand-teal shadow-md">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-brand-navy">Fase 4: Piloto & Go-to-Market</h3>
+                                <span class="text-xs font-bold bg-brand-teal text-white px-2 py-1 rounded">Mes 6+</span>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-4">Objetivo: Validación real y lanzamiento.</p>
+                            <ul class="space-y-2 text-sm text-slate-500">
+                                <li class="flex items-center"><i class="fas fa-rocket text-brand-navy mr-2"></i> Beta "Friends & Family" (500 vidas).</li>
+                                <li class="flex items-center"><i class="fas fa-rocket text-brand-navy mr-2"></i> Lanzamiento B2B Marca Blanca.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Resources & Immediate Actions -->
+                <div class="lg:col-span-4 space-y-8">
+                    
+                    <!-- Resources Card -->
+                    <div class="bg-brand-navy text-white p-6 rounded-3xl shadow-xl">
+                        <h3 class="font-bold text-lg mb-4 flex items-center"><i class="fas fa-cubes mr-2 text-brand-teal"></i> Recursos Necesarios</h3>
+                        <ul class="space-y-4 text-sm text-blue-100">
+                            <li class="border-b border-white/10 pb-2">
+                                <strong class="text-white block">Capital Semilla</strong>
+                                Para desarrollo MVP y consultoría legal.
+                            </li>
+                            <li class="border-b border-white/10 pb-2">
+                                <strong class="text-white block">Data "Tribal"</strong>
+                                Manuales operativos y trucos de gestión de reclamos de expertos.
+                            </li>
+                            <li>
+                                <strong class="text-white block">Volumen Inicial</strong>
+                                Compromiso de masa crítica (1,000 vidas) para fuerza de negociación.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Immediate Actions (Checklist) -->
+                    <div class="bg-white p-6 rounded-3xl border-2 border-brand-teal shadow-lg">
+                        <h3 class="font-bold text-brand-navy text-lg mb-4">Acciones Inmediatas</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 rounded border-2 border-slate-300 mr-3 mt-1 flex-shrink-0"></div>
+                                <div>
+                                    <strong class="text-sm text-slate-800 block">1. Firma de NDA y MOU</strong>
+                                    <span class="text-xs text-slate-500">Formalizar alianza tecnológica.</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 rounded border-2 border-slate-300 mr-3 mt-1 flex-shrink-0"></div>
+                                <div>
+                                    <strong class="text-sm text-slate-800 block">2. Workshop de Producto</strong>
+                                    <span class="text-xs text-slate-500">Definir "dolores" prioritarios del MVP.</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 rounded border-2 border-brand-teal bg-brand-light mr-3 mt-1 flex items-center justify-center text-brand-teal text-xs flex-shrink-0"><i class="fas fa-star"></i></div>
+                                <div>
+                                    <strong class="text-sm text-brand-navy block">3. Análisis de Data de Siniestralidad</strong>
+                                    <span class="text-xs text-slate-500">Análisis detallado para definir productos CareFlow.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: CTA CLOSING -->
+    <section class="py-24 bg-brand-navy text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-brand-navy to-black opacity-80"></div>
+        <div class="relative z-10 max-w-4xl mx-auto px-4">
+            <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-6">Empecemos ahora</h2>
+            <p class="text-xl text-blue-200 mb-10 max-w-2xl mx-auto">
+                La oportunidad de liderar el mercado está servida. Transformemos la data en valor y el servicio en experiencia hoy mismo.
+            </p>
+            <button class="bg-brand-teal text-brand-navy px-12 py-5 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(0,212,255,0.5)] hover:shadow-[0_0_40px_rgba(0,212,255,0.8)] hover:bg-white transition transform hover:-translate-y-1">
+                Iniciar Transformación
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-slate-400 py-12 border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <img src="https://ik.imagekit.io/50wnllxkw/CAREFLOW%20LOGO.png?updatedAt=1762964277893" alt="CareFlow Logo" class="h-12 w-auto brightness-0 invert opacity-80">
+            </div>
+            <div class="text-sm text-center md:text-right">
+                <p>&copy; 2025 CareFlow Panamá. Documento confidencial para uso estratégico.</p>
+                <div class="mt-2 space-x-4">
+                    <a href="#" class="hover:text-brand-teal transition">Privacidad</a>
+                    <a href="#" class="hover:text-brand-teal transition">Términos</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. SIMULATOR LOGIC ---
+        function runSimulation(type) {
+            const outputDiv = document.getElementById('simulation-output');
+            outputDiv.innerHTML = ''; 
+
+            let steps = [];
+
+            if (type === 'urgencia') {
+                steps = [
+                    { text: 'Analizando input: "Dolor de cabeza intenso"...', color: 'text-slate-300' },
+                    { text: '>>> ALERTA CLÍNICA: Posible Migraña o ACV', color: 'text-brand-accent font-bold' },
+                    { text: 'Consultando Póliza #PA-8892... Cobertura Urgencias 100%', color: 'text-blue-300' },
+                    { text: 'Geolocalizando... Ubicación: San Francisco, Panamá', color: 'text-slate-300' },
+                    { text: 'Calculando mejor opción Costo/Calidad...', color: 'text-slate-300' },
+                    { text: '✓ RECOMENDACIÓN GENERADA:', color: 'text-green-400 font-bold mt-2' },
+                    { text: '  -> Hospital Punta Pacífica (Convenio VIP)', color: 'text-white' },
+                    { text: '  -> Copago estimado: $25.00', color: 'text-brand-teal' },
+                    { text: '  -> Iniciando coordinación de admisión...', color: 'text-slate-400 italic' }
+                ];
+            } else if (type === 'cronico') {
+                steps = [
+                    { text: 'Analizando input: "Receta Diabetes Mensual"...', color: 'text-slate-300' },
+                    { text: 'Identificado: Paciente Crónico (Programa CareFlow)', color: 'text-blue-300' },
+                    { text: 'Verificando stock en Farmacias Aliadas...', color: 'text-slate-300' },
+                    { text: '>>> OPORTUNIDAD DE AHORRO DETECTADA', color: 'text-green-400 font-bold' },
+                    { text: '  -> Farmacia Arrocha (Calle 50): Sin stock', color: 'text-red-300' },
+                    { text: '  -> Farmacia El Javillo (Delivery): Disponible', color: 'text-green-300' },
+                    { text: '✓ ACCIÓN AUTOMÁTICA:', color: 'text-white font-bold mt-2' },
+                    { text: '  -> Pedido generado con Copago $0 (Cobertura 100%)', color: 'text-brand-teal' },
+                    { text: '  -> Tiempo estimado entrega: 45 min', color: 'text-slate-400 italic' }
+                ];
+            } else if (type === 'imagen') {
+                steps = [
+                    { text: 'Procesando orden médica: "MRI Rodilla Derecha"...', color: 'text-slate-300' },
+                    { text: 'Validando necesidad médica (RPA Póliza)... APROBADO', color: 'text-blue-300' },
+                    { text: 'Comparando proveedores:', color: 'text-slate-300' },
+                    { text: '  1. Hospital Privado: $850 (Copago $170)', color: 'text-red-300' },
+                    { text: '  2. Centro Radiológico Aliado: $350 (Copago $35)', color: 'text-green-300 font-bold' },
+                    { text: '✓ STEERING ACTIVADO:', color: 'text-green-400 font-bold mt-2' },
+                    { text: '  -> Sugiriendo Centro Radiológico Aliado', color: 'text-white' },
+                    { text: '  -> Ahorro para el paciente: $135.00', color: 'text-brand-teal' },
+                    { text: '  -> Ahorro para la póliza: $500.00', color: 'text-brand-teal' }
+                ];
+            }
+
+            let delay = 0;
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    const p = document.createElement('div');
+                    p.className = `${step.color} font-mono mb-1 p-1 rounded hover:bg-white/5`;
+                    p.innerText = step.text;
+                    outputDiv.appendChild(p);
+                    outputDiv.scrollTop = outputDiv.scrollHeight;
+                }, delay);
+                delay += 800;
+            });
+        }
+
+        // --- 2. LAYERS CONTENT LOGIC ---
+        const layersData = {
+            1: {
+                title: "1. Gobierno & Compliance (Marco Legal)",
+                content: `
+                    <ul class="space-y-4 text-slate-700">
+                        <li class="flex items-start"><i class="fas fa-check-circle text-brand-teal mt-1 mr-3"></i><span><strong>Modelo de Gobernanza:</strong> Comité de Gobierno del Ecosistema (Corredores + Tech + Clínico + Legal).</span></li>
+                        <li class="flex items-start"><i class="fas fa-check-circle text-brand-teal mt-1 mr-3"></i><span><strong>Estructura TPA:</strong> Servicios administrativos bajo la Ley 59 y Ley 12, separando claramente el rol de corretaje.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check-circle text-brand-teal mt-1 mr-3"></i><span><strong>Ética Médica:</strong> Revisión clínica de algoritmos para evitar sesgos y conflictos de interés.</span></li>
+                    </ul>
+                `
+            },
+            2: {
+                title: "2. Datos & Arquitectura Tecnológica",
+                content: `
+                    <ul class="space-y-4 text-slate-700">
+                        <li class="flex items-start"><i class="fas fa-database text-brand-teal mt-1 mr-3"></i><span><strong>Modelo Multi-tenant:</strong> Cada corredor tiene su propio entorno (branding propio) pero comparte el motor IA.</span></li>
+                        <li class="flex items-start"><i class="fas fa-search text-brand-teal mt-1 mr-3"></i><span><strong>RAG Pipeline:</strong> Ingesta masiva de condicionados PDF para consultas de lenguaje natural.</span></li>
+                        <li class="flex items-start"><i class="fas fa-robot text-brand-teal mt-1 mr-3"></i><span><strong>RPA Library:</strong> Robots por aseguradora para lectura de portales.</span></li>
+                    </ul>
+                `
+            },
+            3: {
+                title: "3. Viaje del Paciente",
+                content: `
+                    <ul class="space-y-4 text-slate-700">
+                        <li class="flex items-start"><i class="fas fa-map-marked-alt text-brand-teal mt-1 mr-3"></i><span><strong>Journeys Críticos:</strong> Mapeo detallado de Urgencias, Alto Costo y Crónicos.</span></li>
+                        <li class="flex items-start"><i class="fas fa-traffic-light text-brand-teal mt-1 mr-3"></i><span><strong>Reglas de Steering:</strong> Algoritmos transparentes basados en costo, calidad y ubicación.</span></li>
+                        <li class="flex items-start"><i class="fas fa-user-md text-brand-teal mt-1 mr-3"></i><span><strong>Triggers Clínicos:</strong> Definición de escalamiento humano (Human-in-the-Loop).</span></li>
+                    </ul>
+                `
+            },
+            4: {
+                title: "4. Modelo Operativo (Broker-Plataforma-Red)",
+                content: `
+                    <ul class="space-y-4 text-slate-700">
+                        <li class="flex items-start"><i class="fas fa-sitemap text-brand-teal mt-1 mr-3"></i><span><strong>Matriz RACI:</strong> Roles claros entre Corredor, Plataforma y Proveedor.</span></li>
+                        <li class="flex items-start"><i class="fas fa-handshake text-brand-teal mt-1 mr-3"></i><span><strong>Contratos Proveedores:</strong> SLAs de acceso (citas < 24h) y tarifas preferenciales.</span></li>
+                        <li class="flex items-start"><i class="fas fa-chart-pie text-brand-teal mt-1 mr-3"></i><span><strong>Incentivos Alineados:</strong> Modelo de "Shared Savings" real.</span></li>
+                    </ul>
+                `
+            },
+            5: {
+                title: "5. Experiencia (UX)",
+                content: `
+                    <ul class="space-y-4 text-slate-700">
+                        <li class="flex items-start"><i class="fab fa-whatsapp text-brand-teal mt-1 mr-3"></i><span><strong>WhatsApp Flows:</strong> Menús nativos para "Quiero Cita", "Reembolso", "Emergencia".</span></li>
+                        <li class="flex items-start"><i class="fas fa-laptop-medical text-brand-teal mt-1 mr-3"></i><span><strong>Broker Console:</strong> Dashboard para control de siniestralidad.</span></li>
+                        <li class="flex items-start"><i class="fas fa-clinic-medical text-brand-teal mt-1 mr-3"></i><span><strong>Provider Portal (Light):</strong> Interfaz simple para clínicas aliadas.</span></li>
+                    </ul>
+                `
+            },
+            6: {
+                title: "6. Medición & Expansión",
+                content: `
+                    <ul class="space-y-4 text-slate-700">
+                        <li class="flex items-start"><i class="fas fa-tachometer-alt text-brand-teal mt-1 mr-3"></i><span><strong>Cuadro de Mando:</strong> KPIs clínicos, operativos y financieros.</span></li>
+                        <li class="flex items-start"><i class="fas fa-book text-brand-teal mt-1 mr-3"></i><span><strong>Playbooks:</strong> Guías reutilizables para expansión regional.</span></li>
+                        <li class="flex items-start"><i class="fas fa-sync text-brand-teal mt-1 mr-3"></i><span><strong>QBRs:</strong> Revisiones trimestrales de negocio.</span></li>
+                    </ul>
+                `
+            }
+        };
+
+        function showLayer(layerId) {
+            document.querySelectorAll('.layer-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brand-navy', 'text-white', 'border-l-4', 'border-brand-teal');
+                btn.classList.add('bg-slate-50', 'text-slate-800');
+                const icon = btn.querySelector('i');
+                if(icon) icon.classList.remove('text-brand-navy');
+            });
+
+            const activeBtn = document.getElementById(`btn-layer-${layerId}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('bg-slate-50', 'text-slate-800');
+                activeBtn.classList.add('active');
+            }
+
+            const contentContainer = document.getElementById('layer-content');
+            contentContainer.style.opacity = '0';
+            
+            setTimeout(() => {
+                const data = layersData[layerId];
+                contentContainer.innerHTML = `
+                    <h3 class="text-2xl font-bold text-brand-navy mb-6 border-b border-blue-100 pb-4">${data.title}</h3>
+                    <div class="prose max-w-none text-lg">
+                        ${data.content}
+                    </div>
+                `;
+                contentContainer.style.opacity = '1';
+            }, 200);
+        }
+
+        // --- 3. REVENUE CHART ---
+        document.addEventListener('DOMContentLoaded', () => {
+            showLayer(1);
+
+            const ctxRevenue = document.getElementById('revenueMixChart').getContext('2d');
+            new Chart(ctxRevenue, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Comisión Pura (Tradicional)', 'Fee Tecnológico (SaaS)', 'Gestión de Red / Steering'],
+                    datasets: [{
+                        data: [40, 25, 35],
+                        backgroundColor: [
+                            '#CBD5E1', // Slate 300
+                            '#0B2447', // Brand Navy
+                            '#00D4FF'  // Brand Teal
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true, font: { family: "'Plus Jakarta Sans', sans-serif" } } },
+                        title: { display: true, text: 'Mix de Ingresos Año 3 (Proyección)', font: { size: 16 } }
+                    },
+                    cutout: '70%'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
